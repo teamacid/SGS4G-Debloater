@@ -1,0 +1,192 @@
+###############################################################
+# Please do not edit any of the options below unless          #
+# you know what you're doing!                                 #
+###############################################################
+
+##
+# Configure the variables
+#
+setvar("rom_name",resprop("rom.prop","rom_name"));
+setvar("rom_version",resprop("rom.prop","rom_version"));
+setvar("rom_author",resprop("rom.prop","rom_author"));
+setvar("rom_device",resprop("rom.prop","rom_device"));
+setvar("rom_date",resprop("rom.prop","rom_date"));
+
+##
+# Default installation options
+#
+setvar("option_install_type",1);
+
+##
+# SET THEME
+#
+# Look under aroma/themes/ for theme files
+#
+theme("miui");
+
+##
+# Files
+#
+setvar("file_agreement",       readfile_aroma("agreement.txt"));
+
+##
+# Set up variables
+#
+ini_set("rom_name",             getvar("rom_name"));
+ini_set("rom_version",          getvar("rom_version"));
+ini_set("rom_author",           getvar("rom_author"));
+ini_set("rom_device",           getvar("rom_device"));
+
+##
+# Calibrate Touchscreen
+#
+# For other device, run the installer, then press "menu"
+# and select Calibrating Tools. Follow Instructions, and make
+# sure the touch screen has been valid in the testing step.
+#
+# In the end, there will be alert dialog with calibration data
+# ( green ), replace this calibrate() function with that data.
+#
+# These are the defaults for the SGS4G
+calibrate("0.8809","26","0.9507","19");
+
+##
+# Logo splash screen
+#
+splash(4000, "splash");
+
+##
+# Tasks to run before the installer starts
+#
+# Mount all the mount points. We can manipulate the filesystem before the install.
+#
+run_program("/sbin/mount", "/dev/block/stl9 /system");
+
+##
+# Rom information screen
+#
+viewbox(
+  # Arg 1
+    "Welcome",
+  # Arg 2
+    "You are about to install:\n" +
+    "<#080>"+getvar("rom_name") + "</#>\n\n"+
+    "Created By:\n" +
+    "<#080>"+getvar("rom_author") + "</#>\n\n"+
+    "Designed for:\n" +
+    "<#080>"+getvar("rom_device") + "</#>\n\n"+
+    "Version:\n"+
+    "<#080>"+getvar("rom_version")+"</#>\n\n"+
+    "Updated:\n"+
+    "<#080>"+getvar("rom_date")+"</#>\n\n"+
+    "Select Next to continue."+
+    "",
+  # Arg 3
+    "icons/info"
+);
+
+if
+  # Check if we're using the SGS4G
+  file_getprop("/system/build.prop","ro.product.device") != "SGH-T959V"
+then
+  # Check if the phone model exists in build.prop
+  setvar("current_device",file_getprop("/system/build.prop","ro.product.device"));
+  if
+  file_getprop("/system/build.prop","ro.product.device") == ""
+  then
+    # Since the file wasn't found we'll just say unknown
+    setvar("current_device","Unknown");
+  endif;
+  
+  if
+    confirm(
+      # Arg 1
+      "Wrong Device!",
+      # Arg 1
+      "The Debloater is only for the\n" +
+      "<#080>Galaxy S 4G (SGH-T959V).</#>\n\n" +
+      "You are using the following device:\n" +
+      "<#080>" + getvar("current_device") + "</#>\n\n" +
+      "<#F00>Continuing with the installation may cause your phone to brick.</#>\n\n" +
+      "Would you like to continue?",
+      # Arg 1
+      "icons/alert",
+      # Arg 1
+      "Yes",
+      # Arg 1
+      "No"
+    ) == "no"
+  then
+    exit();
+  endif;
+endif;
+
+agreebox(
+  # Arg 1
+    "Terms Of Use",
+  # Arg 2
+    "Please read the Terms of Use below.",
+  # Arg 3
+    "icons/agreement",
+  # Arg 4
+    getvar("file_agreement"),
+  # 5
+    "I agree to the Terms of Use.",
+  # 6
+    "Please agree to the Terms of Use to continue with the installation."
+);
+
+if
+  confirm(
+    "Reboot phone?",
+    "Would you like your phone to automatically reboot when the installation is done?\n",
+    "icons/info",
+    "Yes",
+    "No"
+  ) == "no"
+then
+  setvar("option_reboot_phone","0");
+endif;
+
+##
+# Grab free space before the debloat
+#
+setvar("free_space_before", getdiskfree("/system","m"));
+
+install(
+  "Debloating",
+  getvar("rom_name") + "\n" +
+  "Please wait until the debloat completes." +
+  "",
+  "icons/install"
+);
+
+##
+# Free space after debloat
+#
+setvar("free_space_after", getdiskfree("/system","m"));
+
+##
+# Calculate space freed
+#
+setvar("space_saved",
+  cal(getvar("free_space_after"),"-",getvar("free_space_before"))
+);
+setvar("space_saved_percent",
+  cal(cal("100", "*", getvar("space_saved")), "/", getdisksize("/system", "m"))
+);
+
+ini_set("text_next", "Finish");
+viewbox(
+  "Debloating Completed",
+    "<#080>Congratulations!</#>\n\n"+
+    getvar("rom_name")+ "\nhas successfully run.\n\n"+
+    "Free space before:\n" + getvar("free_space_before") + "MB\n\n" +
+    "Free space after:\n" + getvar("free_space_after") + "MB\n\n" +
+    "Space saved:\n" + getvar("space_saved") + "MB " +
+    "(" + getvar("space_saved_percent") + "%)\n\n" +
+    "",
+  "icons/info"
+);
+
+run_program("/sbin/umount", "/system");

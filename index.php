@@ -1,5 +1,6 @@
 <?php
-$list = file('apk_list.txt');
+require_once('includes.php');
+$list = file($APK_LIST);
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>

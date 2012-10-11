@@ -1,0 +1,45 @@
+Achromatic,Achromatic
+AOKPtips,AOKPtips
+ApplicationsProvider,ApplicationsProvider
+AppWidgetPicker,AppWidgetPicker
+Browser,Browser
+Calculator,Calculator
+Calendar,Calendar
+CalendarProvider,CalendarProvider
+Camera,Camera
+Contacts,Contacts
+DeskClock,DeskClock
+DrmProvider,DrmProvider
+Email,Email
+Exchange,Exchange
+Gallery2,Gallery2
+* HTMLViewer,HTMLViewer
+* KeyChain,KeyChain
+* LatinIME,LatinIME
+LatinImeDictionaryPack,LatinImeDictionaryPack
+* Launcher2,Launcher2
+LiveWallpapers,LiveWallpapers
+LiveWallpapersPicker,LiveWallpapersPicker
+MagicSmokeWallpapers,MagicSmokeWallpapers
+MediaProvider,MediaProvider
+Microbes,Microbes
+* Mms,Mms
+MusicFX,MusicFX
+NoiseField,NoiseField
+NovaLauncher,NovaLauncher
+PackageInstaller,PackageInstaller
+PhaseBeam,PhaseBeam
+PicoTts,PicoTts
+* ROMControl,ROMControl
+* Settings,Settings
+* SettingsProvider,SettingsProvider
+* SGS4GParts,SGS4GParts
+* SharedStorageBackup,SharedStorageBackup
+SoundRecorder,SoundRecorder
+* Superuser,Superuser
+SwagPapers,SwagPapers
+UnicornPorn,UnicornPorn
+* UserDictionaryProvider,UserDictionaryProvider
+VideoEditor,VideoEditor
+VisualizationWallpapers,VisualizationWallpapers
+VoiceDialer,VoiceDialer

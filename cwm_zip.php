@@ -4,9 +4,10 @@ $zipFileName = 'debloater.zip';
 $zipFilePath = 'zip/';
 $scriptFile  = implode('',file('cwm/original-script'));
 $zipScript   = 'cwm/zip/updater-script';
-$list        = file('apk_list.txt');
+$list        = file($APK_LIST);
 
 if(@$_GET == null) {
+  header('Location: index.php');
   die("Nothing was selected. Please go to the previous page and select something.");
 }
 
